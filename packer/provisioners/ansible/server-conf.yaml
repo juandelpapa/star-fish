@@ -1,0 +1,41 @@
+---
+- name: Marine configs
+  hosts: 'all'
+  become: yes
+  become_method: sudo
+  tasks:
+
+    - name: Update all packages
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install required packages
+      yum:
+        name: ['openssh', 'firewalld', 'curl']
+        state: present
+
+    - name: Start and enable firewalld
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Start and enable SSHD
+      service:
+        name: sshd
+        state: started
+        enabled: yes
+
+    - name: Open SSH port on the firewall
+      firewalld:
+        port: 22/tcp
+        permanent: true
+        state: enabled
+        immediate: yes
+
+  handlers:
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted
