@@ -28,7 +28,16 @@
     "provisioners": [
         {
             "type": "ansible",
-            "playbook_file": "./provisioners/ansible/server-config.yaml"
+            "playbook_file": "./provisioners/ansible/server-conf.yaml"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo curl -L https://github.com/aelsabbahy/goss/releases/latest/download/goss-linux-amd64 -o /usr/local/bin/goss",
+                "sudo chmod +rx /usr/local/bin/goss",
+                "sudo /usr/local/bin/goss autoadd sshd",
+                "sudo /usr/local/bin/goss validate"
+            ]
         }
     ]
 }
